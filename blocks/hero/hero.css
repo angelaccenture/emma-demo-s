@@ -225,33 +225,62 @@
 }
 
 /* -----------------------------------------------------------------------------
- * Hero `promo` variant — thin SAP early-bird promo band (not a full hero).
+ * Hero `promo` variant — SAP Connect split promo:
+ * dark navy→blue gradient, copy + button on the left, SAP Connect graphic right.
  * -------------------------------------------------------------------------- */
 .hero.promo {
-  --min-height: auto;
+  --min-height: 380px;
 
-  background: #0a1c33;
+  background: linear-gradient(100deg, #060f22 0%, #0b1e42 42%, #163a86 100%);
   color: #fff;
 }
 
 .hero.promo .hero-foreground {
-  min-height: auto;
-  padding: 14px var(--spacing-m, 16px);
-  background: none;
-  display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
-  gap: 8px 16px;
-  text-align: center;
-  max-width: var(--grid-container-width, 1200px);
-  margin: 0 auto;
+  background: none;
 }
 
-.hero.promo .hero-foreground p { margin: 0; }
+.hero.promo .hero-heading {
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.hero.promo .fg-text p {
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  max-width: 34rem;
+}
 
 .hero.promo .fg-text a {
-  color: #4db1ff;
+  display: inline-block;
+  margin-top: 12px;
+  padding: 12px 28px;
+  background: #fff;
+  color: #0a2a6b;
+  border-radius: 999px;
   font-weight: 700;
-  text-decoration: underline;
+  text-decoration: none;
+}
+
+.hero.promo .fg-text a:hover {
+  background: #eef3ff;
+}
+
+/* Right column holds the SAP Connect graphic (not a full-bleed background). */
+.hero.promo picture,
+.hero.promo img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (width >= 600px) {
+  .hero.promo .hero-foreground {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 44%);
+    gap: var(--spacing-xxl, 48px);
+    align-items: center;
+    max-width: var(--grid-container-width, 1200px);
+    margin: 0 auto;
+  }
 }
