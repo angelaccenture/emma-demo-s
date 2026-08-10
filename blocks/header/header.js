@@ -309,8 +309,23 @@ export function decorateHeaderContent(header) {
  * Fragment shape: an optional title (first heading/paragraph) + a link list.
  * @param {Element} header
  */
+function readMeta(name) {
+  // Prefer head meta (EDS pipeline promotes the metadata block there).
+  const fromHead = getMetadata(name);
+  if (fromHead) return fromHead;
+  // Fallback: read the raw metadata block from the DOM (some setups don't
+  // promote it to head). Rows are `<div><div>key</div><div>value</div></div>`.
+  const block = document.querySelector('.metadata, .section-metadata');
+  if (!block) return null;
+  for (const row of block.querySelectorAll(':scope > div')) {
+    const [k, v] = row.children;
+    if (k && v && k.textContent.trim().toLowerCase() === name) return v.textContent.trim();
+  }
+  return null;
+}
+
 async function decorateSecondaryNav(header) {
-  const metaPath = getMetadata('secondary-nav');
+  const metaPath = readMeta('secondary-nav');
   if (!metaPath) return; // opt-in: no meta -> no secondary nav
   let fragment;
   try {
