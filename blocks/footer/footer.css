@@ -1,57 +1,100 @@
+/* SAP events footer — dark, 4 link columns + social + copyright. Responsive. */
 footer {
-  a {
-    text-decoration: none;
-  }
+  --sap-footer-bg: #222;
+  --sap-footer-fg: #e5e5e5;
+  --sap-footer-muted: #999;
+  --sap-footer-link: #d1d1d1;
+  --sap-footer-blue: #4db1ff;
 
-  .footer-content {
-    max-width: var(--grid-container-width);
-    margin: 48px auto;
-    font-size: 14px;
-  }
-
-  .section-legal ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .section-copyright p {
-    margin: 0;
-  }
-
-  .section {
-    .default-content {
-      max-width: initial;
-      margin: initial;
-    }
-  }
+  background-color: var(--sap-footer-bg);
+  color: var(--sap-footer-fg);
 }
 
+footer a {
+  color: var(--sap-footer-link);
+  text-decoration: none;
+}
+
+footer a:hover,
+footer a:focus {
+  color: #fff;
+  text-decoration: underline;
+}
+
+footer .footer-content {
+  max-width: var(--grid-container-width, 1200px);
+  margin: 0 auto;
+  padding: 48px 24px 24px;
+  font-size: 14px;
+}
+
+footer ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+footer li,
+footer p {
+  margin: 0;
+}
+
+/* Brand / contact row */
+footer .footer-content > .section:first-child {
+  padding-bottom: 24px;
+  border-bottom: 1px solid #3a3a3a;
+  margin-bottom: 24px;
+}
+
+footer .footer-content > .section:first-child a {
+  color: #fff;
+}
+
+footer .brand-section a,
+footer .footer-content > .section:first-child p:first-child a {
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+/* Link columns section — headings + lists */
+footer h6 {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0 0 12px;
+}
+
+footer .section ul {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+
+/* Social row */
+footer .section-legal ul {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* Copyright */
+footer .section-copyright {
+  padding-top: 16px;
+  border-top: 1px solid #3a3a3a;
+  color: var(--sap-footer-muted);
+}
+
+/* Desktop: 4-column grid for the links section */
 @media (width >= 900px) {
-  footer {
-    margin: 0;
+  footer .footer-content > .section:nth-child(2) > .default-content {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+    max-width: initial;
+  }
 
-    .section-legal {
-      display: flex;
-      justify-content: end;
-      gap: var(--spacing-xl);
-      margin-bottom: 24px;
-
-      ul {
-        display: flex;
-        justify-content: end;
-        gap: var(--spacing-xl);
-      }
-
-      li {
-        margin: 0;
-      }
-    }
-
-    .section-copyright {
-      display: flex;
-      justify-content: end;
-      gap: var(--spacing-xl);
-    }
+  footer .footer-content > .section:nth-child(2) h6 {
+    grid-row: 1;
   }
 }
