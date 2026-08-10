@@ -24,7 +24,7 @@ const locales = {
 const linkBlocks = [
   { fragment: '/fragments/' },
   { schedule: '/schedules/' },
-  { youtube: 'https://www.youtube' },
+  { youtube: 'youtube.com/watch' }, // only auto-embed actual videos, not channel/social links
 ];
 
 // Blocks with self-managed styles
