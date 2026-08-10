@@ -54,6 +54,12 @@ footer .brand-section a,
 footer .footer-content > .section:first-child p:first-child a {
   font-size: 1.75rem;
   font-weight: 700;
+  color: #fff;
+}
+
+/* footer wordmark: hide placeholder icon, keep the "SAP" text */
+footer .footer-content > .section:first-child .icon-logo {
+  display: none;
 }
 
 /* Link columns section — headings + lists */

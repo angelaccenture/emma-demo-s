@@ -437,10 +437,27 @@ header {
 }
 
 header .brand-section a {
+  display: inline-flex;
+  align-items: center;
   color: var(--sap-blue);
   font-weight: 700;
-  font-size: 1.5rem;
-  letter-spacing: 0.02em;
+  font-size: 1.75rem;
+  letter-spacing: 0.03em;
+}
+
+/* SAP brand is a wordmark — show the styled "SAP" text, hide the placeholder icon */
+header .brand-section .brand-text {
+  position: static;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  clip-path: none;
+}
+
+header .brand-section .icon-logo {
+  display: none;
 }
 
 header .main-nav-link {
