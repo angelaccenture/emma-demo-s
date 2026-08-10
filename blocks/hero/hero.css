@@ -225,8 +225,11 @@
 }
 
 /* -----------------------------------------------------------------------------
- * Hero `promo` variant — SAP Connect split promo:
- * dark navy→blue gradient, copy + button on the left, SAP Connect graphic right.
+ * Hero `promo` variant — SAP Connect promo.
+ * Authored per author-kit contract: two rows (background image row + foreground
+ * text row). Base hero handles text-left/image-right via `hero-text-start`;
+ * this variant only restyles: navy→blue gradient, contained right-side graphic,
+ * and a pill CTA.
  * -------------------------------------------------------------------------- */
 .hero.promo {
   --min-height: 380px;
@@ -235,9 +238,10 @@
   color: #fff;
 }
 
+/* Foreground: text column only (no gradient overlay — the block bg is the gradient). */
 .hero.promo .hero-foreground {
-  align-items: center;
   background: none;
+  align-items: center;
 }
 
 .hero.promo .hero-heading {
@@ -249,7 +253,6 @@
 .hero.promo .fg-text p {
   font-size: 1.0625rem;
   line-height: 1.5;
-  max-width: 34rem;
 }
 
 .hero.promo .fg-text a {
@@ -267,20 +270,28 @@
   background: #eef3ff;
 }
 
-/* Right column holds the SAP Connect graphic (not a full-bleed background). */
-.hero.promo picture,
-.hero.promo img {
-  display: block;
-  width: 100%;
-  height: auto;
+/* Background graphic: contained on the right (not full-bleed cover). Hidden on
+ * small screens so the copy stays readable over the gradient. */
+.hero.promo .hero-background {
+  display: none;
 }
 
 @media (width >= 600px) {
-  .hero.promo .hero-foreground {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 44%);
-    gap: var(--spacing-xxl, 48px);
-    align-items: center;
-    max-width: var(--grid-container-width, 1200px);
-    margin: 0 auto;
+  .hero.promo .hero-background {
+    display: block;
+  }
+
+  .hero.promo .hero-background picture {
+    position: absolute;
+    inset: 0 0 0 auto;
+    width: min(50%, 620px);
+    margin-right: max(0px, calc((100% - var(--grid-container-width, 1200px)) / 2));
+  }
+
+  .hero.promo .hero-background img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center right;
   }
 }
