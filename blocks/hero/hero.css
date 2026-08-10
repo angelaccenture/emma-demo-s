@@ -276,6 +276,12 @@
   display: none;
 }
 
+/* Neutralise the base hero's white "quiet-background" helper so the promo
+ * gradient (set on .hero.promo) shows through behind the graphic + text. */
+.hero.promo .hero-background > div {
+  background: none;
+}
+
 @media (width >= 600px) {
   .hero.promo .hero-background {
     display: block;
