@@ -302,79 +302,6 @@ export function decorateHeaderContent(header) {
 }
 
 /**
- * Optional secondary (contextual) nav. Author opts in per page via a
- * `secondary-nav` metadata entry whose value is a fragment path
- * (e.g. /fragments/nav/secondary/events). If the meta is absent OR the
- * fragment can't be loaded, nothing renders and no error is thrown.
- * Fragment shape: an optional title (first heading/paragraph) + a link list.
- * @param {Element} header
- */
-function readMeta(name) {
-  // Prefer head meta (EDS pipeline promotes the metadata block there).
-  const fromHead = getMetadata(name);
-  if (fromHead) return fromHead;
-  // Fallback: this project's pipeline may not promote the metadata block to
-  // head. Read it from the DOM. It can render two ways:
-  //  (a) decorated table: <div><div>key</div><div>value</div></div>
-  //  (b) undecorated content: sequential <p>key</p><p>value</p>
-  const block = document.querySelector('.metadata, .section-metadata');
-  if (block) {
-    for (const row of block.querySelectorAll(':scope > div')) {
-      const [k, v] = row.children;
-      if (k && v && k.textContent.trim().toLowerCase() === name) return v.textContent.trim();
-    }
-  }
-  // (b) scan paragraphs in main for `name` followed by its value
-  const ps = [...document.querySelectorAll('main p')];
-  for (let i = 0; i < ps.length - 1; i += 1) {
-    if (ps[i].textContent.trim().toLowerCase() === name) {
-      return ps[i + 1].textContent.trim();
-    }
-  }
-  return null;
-}
-
-async function decorateSecondaryNav(header) {
-  const metaPath = readMeta('secondary-nav');
-  if (!metaPath) return; // opt-in: no meta -> no secondary nav
-  let fragment;
-  try {
-    fragment = await loadFragment(`${locale.prefix}${metaPath}`);
-  } catch (e) {
-    return; // fragment missing/broken -> skip silently, header still works
-  }
-  if (!fragment) return;
-
-  const bar = document.createElement('div');
-  bar.className = 'secondary-nav';
-
-  const inner = document.createElement('div');
-  inner.className = 'secondary-nav-inner';
-
-  // Title = first heading or lone paragraph; the rest becomes the link list.
-  const title = fragment.querySelector('h1, h2, h3, h4, h5, h6');
-  if (title) {
-    title.classList.add('secondary-nav-title');
-    inner.append(title);
-  }
-  const list = fragment.querySelector('ul');
-  if (list) {
-    list.classList.add('secondary-nav-list');
-    const nav = document.createElement('nav');
-    nav.setAttribute('aria-label', title ? title.textContent : 'Secondary');
-    nav.append(list);
-    // mark current page
-    for (const a of nav.querySelectorAll('a')) {
-      if (a.pathname === window.location.pathname) a.setAttribute('aria-current', 'page');
-    }
-    inner.append(nav);
-  }
-  if (!inner.children.length) return; // nothing usable in the fragment
-  bar.append(inner);
-  header.append(bar);
-}
-
-/**
  * loads and decorates the header
  * @param {Element} el The header element
  */
@@ -386,7 +313,6 @@ export default async function init(el) {
     fragment.classList.add('header-content');
     el.append(fragment);
     decorateHeaderContent(el);
-    await decorateSecondaryNav(el);
   } catch (e) {
     throw Error(e);
   }

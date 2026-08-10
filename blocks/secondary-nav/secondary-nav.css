@@ -1,0 +1,68 @@
+/* Secondary (contextual) nav — thin SAP-style bar: title left, links right. */
+.secondary-nav {
+  --sap-blue: #0070f2;
+  --sap-text: #1d2d3e;
+
+  background-color: #fff;
+  border-top: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
+  font-size: 0.875rem;
+}
+
+.secondary-nav-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-l, 24px);
+  max-width: var(--grid-container-width, 1200px);
+  margin: 0 auto;
+  padding: 0 var(--spacing-m, 12px);
+  min-height: 44px;
+}
+
+.secondary-nav-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--sap-text);
+  white-space: nowrap;
+}
+
+.secondary-nav-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-l, 24px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.secondary-nav-list li {
+  margin: 0;
+}
+
+.secondary-nav-list a {
+  display: inline-block;
+  padding: 12px 0;
+  color: var(--sap-text);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+}
+
+.secondary-nav-list a:hover,
+.secondary-nav-list a[aria-current="page"] {
+  color: var(--sap-blue);
+  border-bottom-color: var(--sap-blue);
+}
+
+/* small screens: scroll instead of wrap */
+@media (width < 700px) {
+  .secondary-nav-inner {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+
+  .secondary-nav-list {
+    flex-wrap: nowrap;
+  }
+}
