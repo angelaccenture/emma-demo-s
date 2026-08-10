@@ -313,13 +313,23 @@ function readMeta(name) {
   // Prefer head meta (EDS pipeline promotes the metadata block there).
   const fromHead = getMetadata(name);
   if (fromHead) return fromHead;
-  // Fallback: read the raw metadata block from the DOM (some setups don't
-  // promote it to head). Rows are `<div><div>key</div><div>value</div></div>`.
+  // Fallback: this project's pipeline may not promote the metadata block to
+  // head. Read it from the DOM. It can render two ways:
+  //  (a) decorated table: <div><div>key</div><div>value</div></div>
+  //  (b) undecorated content: sequential <p>key</p><p>value</p>
   const block = document.querySelector('.metadata, .section-metadata');
-  if (!block) return null;
-  for (const row of block.querySelectorAll(':scope > div')) {
-    const [k, v] = row.children;
-    if (k && v && k.textContent.trim().toLowerCase() === name) return v.textContent.trim();
+  if (block) {
+    for (const row of block.querySelectorAll(':scope > div')) {
+      const [k, v] = row.children;
+      if (k && v && k.textContent.trim().toLowerCase() === name) return v.textContent.trim();
+    }
+  }
+  // (b) scan paragraphs in main for `name` followed by its value
+  const ps = [...document.querySelectorAll('main p')];
+  for (let i = 0; i < ps.length - 1; i += 1) {
+    if (ps[i].textContent.trim().toLowerCase() === name) {
+      return ps[i + 1].textContent.trim();
+    }
   }
   return null;
 }
