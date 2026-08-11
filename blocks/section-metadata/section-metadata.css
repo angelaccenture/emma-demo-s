@@ -246,7 +246,6 @@
   .default-content ul {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
     gap: var(--spacing-l, 24px) var(--spacing-xl, 32px);
     margin: 0;
     padding: 0;
