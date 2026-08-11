@@ -52,10 +52,31 @@
   }
 
   .card-cta-container {
+    --sap-blue: #0070f2;
+
     padding: 0 var(--spacing-default) var(--spacing-default) var(--spacing-default);
     margin: 0;
     display: flex;
-    justify-content: end;
+    justify-content: flex-start;
+
+    a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--sap-blue);
+      font-weight: 400;
+      text-decoration: none;
+    }
+
+    a::after {
+      content: '\203A';
+      font-size: 1.15em;
+      line-height: 1;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
   }
 
   &:not(.quiet):hover {
