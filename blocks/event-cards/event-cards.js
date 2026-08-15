@@ -7,7 +7,26 @@ import { createPicture } from '../../scripts/utils/picture.js';
  *
  * Sheet columns (all optional except title):
  *   title | date | location | description | image | link | linktext
+ *
+ * Optional authored `filter` row narrows rows by location:
+ *   | filter | virtual-live |      -> location === "Online - Live"
+ *   | filter | virtual-on-demand | -> location === "Online - On-demand"
+ *   | filter | in-person |         -> everything that is NOT "Online - ..."
+ *   (no filter / explore-all)      -> all rows
  */
+function applyFilter(rows, filter) {
+  const isOnline = (r) => /^online\s*-/i.test((r.location || '').trim());
+  switch (filter) {
+    case 'virtual-live':
+      return rows.filter((r) => /^online\s*-\s*live$/i.test((r.location || '').trim()));
+    case 'virtual-on-demand':
+      return rows.filter((r) => /^online\s*-\s*on-demand$/i.test((r.location || '').trim()));
+    case 'in-person':
+      return rows.filter((r) => !isOnline(r));
+    default:
+      return rows;
+  }
+}
 const ICONS = {
   date: '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 2v2H5.5A2.5 2.5 0 0 0 3 6.5v12A2.5 2.5 0 0 0 5.5 21h13a2.5 2.5 0 0 0 2.5-2.5v-12A2.5 2.5 0 0 0 18.5 4H17V2h-2v2H9V2H7Zm11.5 6H5.5V6.5h13V8Zm0 2v8.5h-13V10h13Z"/></svg>',
   location: '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a7 7 0 0 0-7 7c0 4.4 5.4 10.5 6.3 11.5a1 1 0 0 0 1.5 0C13.6 19.5 19 13.4 19 9a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg>',
@@ -82,20 +101,33 @@ function buildCard(row) {
 
 export default async function init(el) {
   const link = el.querySelector('a');
-  const path = link ? link.getAttribute('href') : el.textContent.trim();
-  if (!path) return;
+  const path = link ? link.getAttribute('href') : null;
+
+  // Optional `filter` row: two-cell row where the first cell reads "filter".
+  let filter = '';
+  for (const rowEl of el.querySelectorAll(':scope > div')) {
+    const cells = rowEl.querySelectorAll(':scope > div');
+    if (cells.length === 2 && cells[0].textContent.trim().toLowerCase() === 'filter') {
+      filter = cells[1].textContent.trim().toLowerCase();
+    }
+  }
+
+  const sheet = path || el.textContent.trim();
+  if (!sheet) return;
 
   el.textContent = '';
 
   let rows = [];
   try {
-    const resp = await fetch(path);
+    const resp = await fetch(sheet);
     if (!resp.ok) throw new Error(resp.status);
     const json = await resp.json();
     rows = json.data || [];
   } catch (e) {
     return;
   }
+
+  rows = applyFilter(rows, filter);
 
   const grid = document.createElement('div');
   grid.className = 'event-cards-grid';
