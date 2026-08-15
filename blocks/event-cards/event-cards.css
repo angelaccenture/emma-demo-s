@@ -19,3 +19,35 @@
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+/* `list` variant — full-width rows (one card per row) instead of the 3-col grid.
+ * Card lays out horizontally: image left (if any), content fills the rest. */
+.event-cards.list .event-cards-grid {
+  grid-template-columns: 1fr;
+}
+
+@media (width >= 600px) {
+  .event-cards.list .event-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .event-cards.list .card .card-inner {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: none;
+    align-items: center;
+    gap: var(--spacing-l, 24px);
+  }
+
+  /* image (if present) sits left at a fixed width; cards without an image
+   * just flow the content across the full row */
+  .event-cards.list .card .card-picture-container {
+    width: 220px;
+    padding-bottom: 0;
+    aspect-ratio: 16 / 10;
+  }
+
+  .event-cards.list .card .card-cta-container {
+    grid-column: 2;
+  }
+}
