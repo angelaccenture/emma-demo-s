@@ -65,8 +65,6 @@ function buildCard(row) {
     content.append(meta);
   }
 
-  inner.append(content);
-
   if (row.link) {
     const cta = document.createElement('p');
     cta.className = 'card-cta-container';
@@ -74,8 +72,10 @@ function buildCard(row) {
     a.href = row.link;
     a.textContent = row.linktext || 'Learn more';
     cta.append(a);
-    inner.append(cta);
+    content.append(cta);
   }
+
+  inner.append(content);
 
   return card;
 }
