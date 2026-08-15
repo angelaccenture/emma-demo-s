@@ -32,23 +32,22 @@
   }
 
   .event-cards.list .card .card-inner {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    grid-template-rows: none;
-    align-items: center;
+    display: flex;
+    align-items: flex-start;
     gap: var(--spacing-l, 24px);
   }
 
-  /* image (if present) sits left at a fixed width; cards without an image
-   * just flow the content across the full row */
+  /* image (if present) sits left at a fixed width; content column stacks
+   * title -> desc -> meta -> CTA, all left-aligned */
   .event-cards.list .card .card-picture-container {
+    flex: 0 0 220px;
     width: 220px;
     padding-bottom: 0;
     aspect-ratio: 16 / 10;
   }
 
-  .event-cards.list .card .card-cta-container {
-    grid-column: 2;
+  .event-cards.list .card .card-content-container {
+    flex: 1 1 auto;
   }
 }
 
