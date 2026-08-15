@@ -152,3 +152,41 @@
 .event-cards .card-cta-container a:hover {
   text-decoration: underline;
 }
+
+/* -----------------------------------------------------------------------------
+ * event-filter bar — dropdown facets above the card list (per-tab).
+ * -------------------------------------------------------------------------- */
+.event-cards .event-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+  margin: 0 0 var(--spacing-l, 24px);
+  padding-bottom: var(--spacing-s, 12px);
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.event-cards .event-filter-select select {
+  appearance: none;
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1d2d3e;
+  padding: 4px 26px 4px 0;
+  cursor: pointer;
+  /* chevron */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%231d2d3e' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 4px center;
+}
+
+.event-cards .event-filter-select select:focus-visible {
+  outline: 2px solid var(--sap-blue, #0070f2);
+  outline-offset: 2px;
+}
+
+/* active (a value chosen) — tint blue like SAP */
+.event-cards .event-filter-select select:not([data-empty]) option:checked {
+  color: var(--sap-blue, #0070f2);
+}

@@ -99,6 +99,74 @@ function buildCard(row) {
   return card;
 }
 
+/* Read active tag selections from the URL: ?tag=field:value (repeatable). */
+function readTags() {
+  const map = {};
+  const params = new URLSearchParams(window.location.search);
+  for (const v of params.getAll('tag')) {
+    const [field, ...rest] = v.split(':');
+    const val = rest.join(':');
+    if (!field || !val) continue;
+    (map[field] ||= new Set()).add(val);
+  }
+  return map;
+}
+
+/* Write active selections back to the URL as repeatable ?tag=field:value. */
+function writeTags(map) {
+  const url = new URL(window.location.href);
+  url.searchParams.delete('tag');
+  for (const [field, set] of Object.entries(map)) {
+    for (const val of set) url.searchParams.append('tag', `${field}:${val}`);
+  }
+  window.history.replaceState(null, '', url);
+}
+
+/* Rows that satisfy every active facet (AND across fields, OR within a field). */
+function matchTags(rows, map) {
+  const fields = Object.keys(map).filter((f) => map[f].size);
+  if (!fields.length) return rows;
+  return rows.filter((r) => fields.every((f) => map[f].has((r[f] || '').trim())));
+}
+
+/* Build the dropdown filter bar for the given facet fields. */
+function buildFilterBar(fields, rows, state, onChange) {
+  const bar = document.createElement('div');
+  bar.className = 'event-filter-bar';
+
+  for (const { field, label } of fields) {
+    const values = [...new Set(rows.map((r) => (r[field] || '').trim()).filter(Boolean))].sort();
+    if (!values.length) continue;
+
+    const wrap = document.createElement('label');
+    wrap.className = 'event-filter-select';
+    const select = document.createElement('select');
+    select.dataset.field = field;
+
+    const def = document.createElement('option');
+    def.value = '';
+    def.textContent = label;
+    select.append(def);
+    for (const v of values) {
+      const opt = document.createElement('option');
+      opt.value = v;
+      opt.textContent = v;
+      if (state[field]?.has(v)) opt.selected = true;
+      select.append(opt);
+    }
+
+    select.addEventListener('change', () => {
+      const val = select.value;
+      state[field] = new Set(val ? [val] : []);
+      onChange();
+    });
+
+    wrap.append(select);
+    bar.append(wrap);
+  }
+  return bar;
+}
+
 export default async function init(el) {
   const link = el.querySelector('a');
   const path = link ? link.getAttribute('href') : null;
@@ -113,6 +181,18 @@ export default async function init(el) {
       break;
     }
   }
+
+  // Optional `filters` config: which facet columns to expose as dropdowns.
+  // | filters | product-category, industry, event-category, language, region |
+  let filterFields = [];
+  for (const rowEl of el.querySelectorAll('div')) {
+    const cells = [...rowEl.children].filter((c) => c.tagName === 'DIV' || c.tagName === 'P');
+    if (cells.length === 2 && cells[0].textContent.trim().toLowerCase() === 'filters') {
+      filterFields = cells[1].textContent.split(',').map((f) => f.trim().toLowerCase()).filter(Boolean);
+      break;
+    }
+  }
+  const labelFor = (f) => f.replace(/-/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
 
   const sheet = path || el.textContent.trim();
   if (!sheet) return;
@@ -129,10 +209,30 @@ export default async function init(el) {
     return;
   }
 
+  // Tab-level location filter first — facets operate within this subset.
   rows = applyFilter(rows, filter);
 
   const grid = document.createElement('div');
   grid.className = 'event-cards-grid';
-  for (const row of rows) grid.append(buildCard(row));
+
+  const render = () => {
+    grid.textContent = '';
+    const shown = matchTags(rows, state);
+    for (const row of shown) grid.append(buildCard(row));
+  };
+
+  const state = readTags();
+  // drop selections for fields we aren't showing
+  if (filterFields.length) {
+    for (const f of Object.keys(state)) if (!filterFields.includes(f)) delete state[f];
+  }
+
+  if (filterFields.length) {
+    const fields = filterFields.map((field) => ({ field, label: labelFor(field) }));
+    const bar = buildFilterBar(fields, rows, state, () => { writeTags(state); render(); });
+    el.append(bar);
+  }
+
   el.append(grid);
+  render();
 }
