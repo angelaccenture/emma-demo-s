@@ -313,3 +313,34 @@
     object-position: center right;
   }
 }
+
+/* -----------------------------------------------------------------------------
+ * Hero `purple` modifier (pairs with `promo`) — SAP Events Finder look:
+ * solid SAP purple + magenta chevron pattern, transparent silhouette bottom-right.
+ * -------------------------------------------------------------------------- */
+.hero.promo.purple {
+  --sap-purple: #a100ff;
+  --sap-magenta: #e100c3;
+
+  background:
+    /* repeating chevron flecks */
+    repeating-linear-gradient(135deg,
+      transparent 0 46px,
+      rgb(225 0 195 / 22%) 46px 58px,
+      transparent 58px 104px),
+    var(--sap-purple);
+}
+
+@media (width >= 600px) {
+  /* silhouette sits flush to the bottom, larger than the contained promo graphic */
+  .hero.promo.purple .hero-background picture {
+    inset: auto 0 0 auto;
+    width: min(46%, 560px);
+    height: 100%;
+  }
+
+  .hero.promo.purple .hero-background img {
+    object-fit: contain;
+    object-position: right bottom;
+  }
+}
