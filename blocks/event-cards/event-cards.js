@@ -168,36 +168,26 @@ function buildFilterBar(fields, rows, state, onChange) {
 }
 
 export default async function init(el) {
+  // Single-column authoring per David's Model (#10 few columns, #14 no
+  // key/value pairs for author content). One value per row, read by position:
+  //   Row 1 — sheet: link or path to the events .json
+  //   Row 2 — filter: tab location filter (explore-all | in-person | virtual-live | virtual-on-demand)
+  //   Row 3 — filters: comma-separated facet columns to expose as dropdowns
+  const rowEls = [...el.querySelectorAll(':scope > div')];
+  const cellText = (i) => (rowEls[i]?.textContent || '').trim();
+
   const link = el.querySelector('a');
-  const path = link ? link.getAttribute('href') : null;
-
-  // Optional `filter` config: any 2-cell row whose first cell reads "filter".
-  // Cells may be <div> or <p>, nested at any depth within the block.
-  let filter = '';
-  for (const rowEl of el.querySelectorAll('div')) {
-    const cells = [...rowEl.children].filter((c) => c.tagName === 'DIV' || c.tagName === 'P');
-    if (cells.length === 2 && cells[0].textContent.trim().toLowerCase() === 'filter') {
-      filter = cells[1].textContent.trim().toLowerCase();
-      break;
-    }
-  }
-
-  // Optional `filters` config: which facet columns to expose as dropdowns.
-  // | filters | product-category, industry, event-category, language, region |
-  let filterFields = [];
-  for (const rowEl of el.querySelectorAll('div')) {
-    const cells = [...rowEl.children].filter((c) => c.tagName === 'DIV' || c.tagName === 'P');
-    if (cells.length === 2 && cells[0].textContent.trim().toLowerCase() === 'filters') {
-      filterFields = cells[1].textContent.split(',').map((f) => f.trim().toLowerCase()).filter(Boolean);
-      break;
-    }
-  }
-  const labelFor = (f) => f.replace(/-/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
-
-  const sheet = path || el.textContent.trim();
+  const sheet = link ? link.getAttribute('href') : cellText(0);
   if (!sheet) return;
 
+  const filter = cellText(1).toLowerCase();
+  const filterFields = cellText(2)
+    ? cellText(2).split(',').map((f) => f.trim().toLowerCase()).filter(Boolean)
+    : [];
+  const labelFor = (f) => f.replace(/-/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
+
   el.textContent = '';
+
 
   let rows = [];
   try {
