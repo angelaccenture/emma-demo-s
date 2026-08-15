@@ -106,3 +106,50 @@
 .event-cards .card-cta-container {
   padding-top: 4px;
 }
+
+/* -----------------------------------------------------------------------------
+ * Self-contained card box + CTA (event-cards can't rely on blocks/card.css
+ * being loaded — EDS only loads a block's CSS when that block is on the page).
+ * -------------------------------------------------------------------------- */
+.event-cards {
+  --sap-blue: #0070f2;
+}
+
+.event-cards .card {
+  border: 1px solid #d9dcdf;
+  border-radius: 10px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.event-cards .card-inner {
+  padding: var(--spacing-l, 24px);
+}
+
+.event-cards.list .card .card-inner {
+  padding: var(--spacing-l, 24px);
+}
+
+/* CTA: blue "Event details ›" with arrow */
+.event-cards .card-cta-container {
+  margin: 0;
+}
+
+.event-cards .card-cta-container a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--sap-blue);
+  font-weight: 400;
+  text-decoration: none;
+}
+
+.event-cards .card-cta-container a::after {
+  content: '\203A';
+  font-size: 1.15em;
+  line-height: 1;
+}
+
+.event-cards .card-cta-container a:hover {
+  text-decoration: underline;
+}
