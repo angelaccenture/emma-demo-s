@@ -20,7 +20,7 @@ function applyFilter(rows, filter) {
     case 'virtual-live':
       return rows.filter((r) => /^online\s*-\s*live$/i.test((r.location || '').trim()));
     case 'virtual-on-demand':
-      return rows.filter((r) => /^online\s*-\s*on-demand$/i.test((r.location || '').trim()));
+      return rows.filter((r) => /^online\s*-\s*on[\s-]?demand$/i.test((r.location || '').trim()));
     case 'in-person':
       return rows.filter((r) => !isOnline(r));
     default:
