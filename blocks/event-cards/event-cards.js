@@ -103,12 +103,14 @@ export default async function init(el) {
   const link = el.querySelector('a');
   const path = link ? link.getAttribute('href') : null;
 
-  // Optional `filter` row: two-cell row where the first cell reads "filter".
+  // Optional `filter` config: any 2-cell row whose first cell reads "filter".
+  // Cells may be <div> or <p>, nested at any depth within the block.
   let filter = '';
-  for (const rowEl of el.querySelectorAll(':scope > div')) {
-    const cells = rowEl.querySelectorAll(':scope > div');
+  for (const rowEl of el.querySelectorAll('div')) {
+    const cells = [...rowEl.children].filter((c) => c.tagName === 'DIV' || c.tagName === 'P');
     if (cells.length === 2 && cells[0].textContent.trim().toLowerCase() === 'filter') {
       filter = cells[1].textContent.trim().toLowerCase();
+      break;
     }
   }
 
