@@ -1,16 +1,30 @@
 import { createPicture } from '../../scripts/utils/picture.js';
 
 /*
- * event-cards — renders a grid of cards from a DA spreadsheet (one row = one card).
- * Author drops a link to the sheet (…/name.json); add/remove rows in the sheet to
- * add/remove cards — no HTML editing.
+ * event-cards — renders a grid (or full-width `list`) of cards from a DA
+ * spreadsheet (one row = one card). Add/remove rows in the sheet to add/remove
+ * cards — no HTML editing.
  *
  * Sheet columns (all optional except title):
- *   title | date | location | description | image | link
- *
- * The card markup mirrors the decorated `card` block, so blocks/card/card.css
- * styles it (white bg, gray border, blue CTA) with no extra CSS needed.
+ *   title | date | location | description | image | link | linktext
  */
+const ICONS = {
+  date: '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 2v2H5.5A2.5 2.5 0 0 0 3 6.5v12A2.5 2.5 0 0 0 5.5 21h13a2.5 2.5 0 0 0 2.5-2.5v-12A2.5 2.5 0 0 0 18.5 4H17V2h-2v2H9V2H7Zm11.5 6H5.5V6.5h13V8Zm0 2v8.5h-13V10h13Z"/></svg>',
+  location: '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a7 7 0 0 0-7 7c0 4.4 5.4 10.5 6.3 11.5a1 1 0 0 0 1.5 0C13.6 19.5 19 13.4 19 9a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg>',
+};
+
+function metaItem(kind, text) {
+  const span = document.createElement('span');
+  span.className = `event-meta-item event-meta-${kind}`;
+  const icon = document.createElement('span');
+  icon.className = 'event-meta-icon';
+  icon.innerHTML = ICONS[kind];
+  const label = document.createElement('span');
+  label.textContent = text;
+  span.append(icon, label);
+  return span;
+}
+
 function buildCard(row) {
   const card = document.createElement('div');
   card.className = 'card';
@@ -28,18 +42,29 @@ function buildCard(row) {
 
   const content = document.createElement('div');
   content.className = 'card-content-container';
+
   if (row.title) {
     const h = document.createElement('h3');
     h.textContent = row.title;
     content.append(h);
   }
-  for (const key of ['date', 'location', 'description']) {
-    if (row[key]) {
-      const p = document.createElement('p');
-      p.textContent = row[key];
-      content.append(p);
-    }
+
+  if (row.description) {
+    const p = document.createElement('p');
+    p.className = 'event-desc';
+    p.textContent = row.description;
+    content.append(p);
   }
+
+  // meta row: date + location with icons
+  if (row.date || row.location) {
+    const meta = document.createElement('p');
+    meta.className = 'event-meta';
+    if (row.date) meta.append(metaItem('date', row.date));
+    if (row.location) meta.append(metaItem('location', row.location));
+    content.append(meta);
+  }
+
   inner.append(content);
 
   if (row.link) {
@@ -56,7 +81,6 @@ function buildCard(row) {
 }
 
 export default async function init(el) {
-  // Sheet path = authored link, or plain-text path in the cell.
   const link = el.querySelector('a');
   const path = link ? link.getAttribute('href') : el.textContent.trim();
   if (!path) return;
