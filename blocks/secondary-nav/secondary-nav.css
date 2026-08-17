@@ -20,7 +20,7 @@
   min-height: 48px;
 }
 
-/* Section title — always shows the blue base underline (you are here). */
+/* Section title. */
 .secondary-nav-title {
   display: flex;
   align-items: center;
@@ -29,7 +29,6 @@
   font-weight: 700;
   color: var(--sap-text);
   white-space: nowrap;
-  border-bottom: 3px solid var(--sap-blue);
 }
 
 /* Divider between title and links. */
