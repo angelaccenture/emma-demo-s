@@ -45,9 +45,16 @@ function decorate(el) {
       loginLink = link;
       return;
     }
+    // An authored-emphasised item marks the current tab. Note: the global
+    // button decorator runs first and turns a <strong> link into a
+    // `btn btn-primary` (a dark filled button) while unwrapping the <strong>,
+    // so detect either the raw emphasis OR the resulting button classes, then
+    // strip the button styling so it renders as a nav tab, not a black box.
+    const wasButton = link.classList.contains('btn');
+    const isCurrent = wasButton || link.closest('strong, em') || row.textContent.includes('*');
+    link.classList.remove('btn', 'btn-primary', 'btn-secondary', 'btn-accent', 'btn-negative', 'btn-outline');
     link.classList.add('partner-subnav-link');
-    // Mark current tab if authored emphasised.
-    if (link.closest('strong, em') || row.textContent.includes('*')) {
+    if (isCurrent) {
       link.classList.add('is-current');
       link.setAttribute('aria-current', 'page');
     }

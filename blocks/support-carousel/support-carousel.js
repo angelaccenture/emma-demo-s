@@ -59,7 +59,7 @@ function decorateImage(inner) {
   }
 }
 
-function decorateSlide(row, index) {
+function decorateSlide(row, index, wide) {
   row.classList.add('support-carousel-slide');
   row.setAttribute('role', 'group');
   row.setAttribute('aria-roledescription', 'slide');
@@ -79,11 +79,28 @@ function decorateSlide(row, index) {
     if (p.querySelector('img')) return;
     if (!p.classList.contains('support-carousel-cta')) p.classList.add('support-carousel-desc');
   });
+
+  // Wide/editorial slide (like the source "Features" carousel): text on the
+  // left, image on the right. Group all non-image nodes into a body wrapper so
+  // the card can lay them out as [text | image] via flex, deterministically.
+  if (wide) {
+    const imageDiv = inner.querySelector('.support-carousel-image');
+    const body = h('div', { class: 'support-carousel-body' });
+    [...inner.children].forEach((c) => { if (c !== imageDiv) body.append(c); });
+    inner.append(body);
+    if (imageDiv) inner.append(imageDiv);
+  }
 }
 
 export default async function init(el) {
+  // The first support-carousel on the page is the "Features" spotlight: a wide
+  // editorial layout (text left, image right, one slide per view). Any later
+  // instance (e.g. "Additional resources") keeps the default multi-card grid.
+  const wide = document.querySelector('.support-carousel') === el;
+  if (wide) el.classList.add('support-carousel-wide');
+
   const slides = [...el.querySelectorAll(':scope > div')];
-  slides.forEach(decorateSlide);
+  slides.forEach((row, i) => decorateSlide(row, i, wide));
 
   const track = h('div', { class: 'support-carousel-track', role: 'list' });
   slides.forEach((s) => track.append(s));
@@ -130,4 +147,8 @@ export default async function init(el) {
   track.addEventListener('scroll', () => window.requestAnimationFrame(update), { passive: true });
   window.addEventListener('resize', update);
   update();
+  // Re-evaluate once layout has settled (flex widths, images) so the Next
+  // button isn't left disabled when the track actually overflows.
+  window.requestAnimationFrame(update);
+  window.addEventListener('load', update);
 }

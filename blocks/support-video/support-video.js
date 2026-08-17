@@ -103,4 +103,22 @@ export default async function init(el) {
   }
 
   el.append(frame);
+
+  // Layout: pair the video (left) with the section's intro copy (right), like
+  // the source "Get started with support" block. The intro paragraph lives in
+  // the preceding default-content alongside the section heading; we keep the
+  // heading in place and move only the paragraph(s) into a right-hand column.
+  // Guarded so it only runs when a "Get started"-style intro is present.
+  const section = el.closest('.section');
+  const intro = section && section.querySelector(':scope > .default-content');
+  const introParas = intro ? [...intro.querySelectorAll(':scope > p')].filter((p) => p.textContent.trim()) : [];
+  if (introParas.length) {
+    el.classList.add('support-video-split');
+    const media = h('div', { class: 'support-video-media' });
+    const copy = h('div', { class: 'support-video-copy' });
+    // Move existing children (the frame) into the media column.
+    [...el.childNodes].forEach((n) => media.append(n));
+    introParas.forEach((p) => copy.append(p));
+    el.append(media, copy);
+  }
 }

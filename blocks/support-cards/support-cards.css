@@ -8,8 +8,10 @@
   margin: var(--spacing-xxl) auto;
 }
 
-/* Banner variant: a single full-width horizontal feature (image left, text
- * right) — used for the Community award section. Add class "banner" or it
+/* Banner variant: a single full-width horizontal feature (award image left,
+ * text right) — the Community award section. Matches the source
+ * alignmentContainerWrapper: no card chrome, the full award badge shown on the
+ * left (not cropped), text top-aligned on the right. Add class "banner" or it
  * auto-applies when the grid holds exactly one card (see JS). */
 .support-cards.banner {
   grid-template-columns: 1fr;
@@ -17,31 +19,64 @@
 
 .support-cards.banner .support-card {
   flex-direction: row;
+
+  /* No card box — the source shows the award flush, not in a bordered tile */
+  background: none;
+  border: 0;
+  border-radius: 0;
+}
+
+.support-cards.banner .support-card:hover {
+  box-shadow: none;
+  transform: none;
 }
 
 .support-cards.banner .support-card-inner {
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
+  gap: var(--spacing-xl);
+}
+
+/* Award badge column: fixed narrow width, shown in full (contain), roughly
+ * square like the source (~271px). No reserved crop box / grey backdrop. The
+ * image may be wrapped in a <p>, so size that direct child too. */
+.support-cards.banner .support-card-inner > .support-card-image,
+.support-cards.banner .support-card-inner > p:has(.support-card-image) {
+  flex: 0 0 271px;
+  margin: 0;
 }
 
 .support-cards.banner .support-card-image {
-  flex: 0 0 40%;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 1 / 1;
+  background: none;
 }
 
-.support-cards.banner .support-card-inner > :not(.support-card-image) {
-  margin-left: 0;
+.support-cards.banner .support-card-image img,
+.support-cards.banner .support-card-image picture {
+  object-fit: contain;
 }
 
-.support-cards.banner .support-card-title,
-.support-cards.banner .support-card-desc,
-.support-cards.banner .support-card-cta {
-  padding-left: var(--spacing-xl);
-  padding-right: var(--spacing-xl);
+/* Right-hand text column: title / description / CTA stacked vertically */
+.support-cards.banner .support-card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
 }
 
+/* Text column sits to the right of the badge, top-aligned, no card padding */
 .support-cards.banner .support-card-title {
-  padding-top: var(--spacing-l);
+  padding: 0 0 var(--spacing-s);
+}
+
+.support-cards.banner .support-card-desc {
+  padding: 0;
+  margin: 0 0 var(--spacing-s);
+}
+
+.support-cards.banner .support-card-cta {
+  padding: 0;
+  margin-top: 0;
 }
 
 @media (width <= 700px) {
@@ -52,7 +87,8 @@
 
   .support-cards.banner .support-card-image {
     flex-basis: auto;
-    width: 100%;
+    width: 220px;
+    max-width: 100%;
   }
 }
 

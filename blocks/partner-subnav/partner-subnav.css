@@ -27,8 +27,11 @@
 
 .partner-subnav .partner-subnav-list {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-l);
+
+  /* Keep all tabs on one line (source shows them inline); the nav can grow to
+   * fit rather than dropping the last item ("Become a partner") to a 2nd row. */
+  flex-wrap: nowrap;
+  gap: var(--spacing-m);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -36,6 +39,7 @@
 
 .partner-subnav .partner-subnav-list li {
   margin: 0;
+  white-space: nowrap;
 }
 
 .partner-subnav .partner-subnav-link {
