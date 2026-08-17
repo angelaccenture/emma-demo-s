@@ -14,9 +14,9 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--spacing-m);
-  margin-bottom: var(--spacing-l);
+  justify-content: center;
+  gap: var(--spacing-l);
+  margin-bottom: var(--spacing-xl);
 }
 
 .support-top-tasks .support-top-tasks-heading {
@@ -24,6 +24,7 @@
   max-width: 640px;
   font-size: var(--heading-font-size-s);
   font-weight: 500;
+  text-align: center;
   color: light-dark(var(--color-dark), var(--color-light));
 }
 
@@ -44,7 +45,7 @@
 
 .support-top-tasks .support-top-tasks-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: var(--spacing-m);
 }
 

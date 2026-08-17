@@ -92,6 +92,45 @@
   border: 0;
 }
 
+/* -----------------------------------------------------------------------------
+ * Split layout — "Get started with support": video on the left, intro copy on
+ * the right (matches support.sap.com). Overrides the narrow centered default.
+ * -------------------------------------------------------------------------- */
+.support-video.support-video-split {
+  max-width: var(--grid-container-width);
+  padding: 0 var(--spacing-l);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: var(--spacing-xxl);
+}
+
+.support-video.support-video-split .support-video-media {
+  min-width: 0;
+}
+
+.support-video.support-video-split .support-video-copy {
+  min-width: 0;
+  font-size: var(--body-font-size-m);
+  line-height: var(--body-line-height);
+  color: light-dark(var(--color-gray-700), var(--color-gray-300));
+}
+
+.support-video.support-video-split .support-video-copy p {
+  margin: 0 0 var(--spacing-m);
+}
+
+.support-video.support-video-split .support-video-copy p:last-child {
+  margin-bottom: 0;
+}
+
+@media (width <= 800px) {
+  .support-video.support-video-split {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-l);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .support-video * {
     transition: none !important;

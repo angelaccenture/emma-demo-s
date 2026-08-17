@@ -1,7 +1,8 @@
 .partner-hero {
-  --partner-blue: #0070f2;
+  --partner-blue: #0040b0;
 
-  background-color: light-dark(var(--color-gray-100), var(--color-gray-900));
+  /* Full-width SAP-blue hero banner to match sap.com/partners/login */
+  background-color: var(--partner-blue);
 }
 
 .partner-hero .partner-hero-inner {
@@ -25,24 +26,25 @@
   font-size: clamp(28px, 4vw, 44px);
   font-weight: 700;
   line-height: 1.15;
-  color: light-dark(var(--color-dark), var(--color-light));
+  color: #fff;
 }
 
 .partner-hero .partner-hero-text {
   margin: 0;
   font-size: var(--body-font-size-l);
   line-height: var(--body-line-height);
-  color: light-dark(var(--color-gray-700), var(--color-gray-300));
+  color: rgb(255 255 255 / 90%);
 }
 
+/* White button with blue label, matching the source hero CTA */
 .partner-hero .partner-hero-cta {
   align-self: flex-start;
   display: inline-block;
   margin-top: var(--spacing-s);
   padding: 12px 24px;
   border-radius: 6px;
-  background-color: var(--partner-blue);
-  color: #fff;
+  background-color: #fff;
+  color: var(--partner-blue);
   font-weight: 600;
   text-decoration: none;
   transition: opacity 0.2s ease-in-out;
@@ -53,7 +55,6 @@
 }
 
 .partner-hero .partner-hero-media {
-  border-radius: 12px;
   overflow: hidden;
 }
 
