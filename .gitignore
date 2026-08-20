@@ -11,3 +11,4 @@ helix-importer-ui
 .claude/settings.local.json
 .superpowers
 docs/adr/0000-own-the-page-lifecycle.spicy.md
+.scratch/
