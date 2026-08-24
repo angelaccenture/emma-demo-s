@@ -78,19 +78,23 @@
     }
   }
 
-  /* `para` variation — SAP Connect timeline/story row (.person-timeline-item). */
+  /* `para` variation — SAP Connect timeline/story row (.person-timeline-item).
+     The flex layout lives on .row so the gap applies between the columns
+     (the base .columns .row is display:grid, which would otherwise win). */
   &.para {
-    display: flex;
-    align-items: center;
-    gap: 160px;
-    margin-bottom: 0;
-    background: rgb(18 23 28 / 100%);
-    position: relative;
-    z-index: 10;
-    padding-top: clamp(48px, 6vw, 96px);
-    padding-bottom: clamp(48px, 6vw, 96px);
-    overflow: clip;
-    will-change: opacity;
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 160px;
+      margin-bottom: 0;
+      background: rgb(18 23 28 / 100%);
+      position: relative;
+      z-index: 10;
+      padding-top: clamp(48px, 6vw, 96px);
+      padding-bottom: clamp(48px, 6vw, 96px);
+      overflow: clip;
+      will-change: opacity;
+    }
 
     /* left column — copy (.person-timeline-copy) */
     .col-1 {
