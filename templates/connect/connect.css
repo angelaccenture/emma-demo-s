@@ -78,7 +78,7 @@ body.connect-template .sponsors-logos img {
 }
 
 /* Section heading rhythm to echo the source's generous spacing */
-body.connect-template main > .section > .default-content-wrapper > h2 {
+body.connect-template main > .section > .default-content > h2 {
   font-size: var(--heading-font-size-xxl, 2.5rem);
   line-height: 1.1;
   margin-bottom: 0.5em;
@@ -90,7 +90,7 @@ body.connect-template main > .section > .default-content-wrapper > h2 {
    scope to it without needing a content change.
    NOTE: the source also applies a `person-float-up` entrance animation here —
    deferred to the scroll/parallax effects pass. */
-body.connect-template main > .section.grid-6 > .default-content-wrapper > h2 {
+body.connect-template main > .section.grid-6 > .default-content > h2 {
   margin: 0 0 40px;
   font-size: clamp(16px, 2.5vw, 24px);
   font-weight: 400;
