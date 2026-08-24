@@ -28,4 +28,10 @@ export default function init(el) {
   }
   ctaPara.classList.add('card-cta-container');
   inner.append(ctaPara);
+
+  // Overlay variation: make the whole card a single clickable target by
+  // stretching the CTA link over the card (see .overlay in card.css).
+  if (el.classList.contains('overlay')) {
+    cta.classList.add('card-stretched-link');
+  }
 }

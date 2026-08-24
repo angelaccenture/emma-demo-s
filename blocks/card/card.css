@@ -103,4 +103,86 @@
       margin: 6px;
     }
   }
+
+  /* Overlay: image fills the card, title overlays the bottom, whole card clickable */
+  &.overlay {
+    position: relative;
+    border: none;
+    border-radius: 16px;
+    background-color: initial;
+    color: var(--color-light);
+
+    .card-inner {
+      display: block;
+      position: relative;
+      height: 100%;
+    }
+
+    .card-picture-container {
+      position: relative;
+      padding-bottom: 128%;
+
+      picture {
+        position: absolute;
+        inset: 0;
+        opacity: 1;
+      }
+
+      img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.4s ease;
+      }
+
+      /* gradient scrim so white text stays readable over the photo */
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgb(0 0 0 / 80%) 0%, rgb(0 0 0 / 30%) 35%, rgb(0 0 0 / 0%) 65%);
+      }
+    }
+
+    .card-content-container {
+      position: absolute;
+      inset: auto 0 0;
+      padding: var(--spacing-m) var(--spacing-l) var(--spacing-l);
+
+      h3 {
+        margin: 0;
+        color: var(--color-light);
+        font-size: var(--heading-font-size-m, 24px);
+        line-height: 1.15;
+      }
+    }
+
+    /* stretched link covers the whole card; its text is kept for a11y but hidden */
+    .card-cta-container {
+      position: static;
+      padding: 0;
+      margin: 0;
+
+      .card-stretched-link {
+        position: absolute;
+        inset: 0;
+        font-size: 0;
+        color: transparent;
+
+        &::after {
+          content: none;
+        }
+      }
+    }
+
+    &:hover {
+      border: none;
+      box-shadow: 0 10px 24px rgb(0 0 0 / 35%);
+      transform: translateY(-4px);
+
+      img {
+        transform: scale(1.05);
+      }
+    }
+  }
 }
