@@ -40,3 +40,31 @@
 .advanced-tabs.left .tab-list {
   justify-content: flex-start;
 }
+
+/* ===========================================================================
+   VARIANT: advanced-tabs (pills)
+   Segmented PILL toggle. Authored as "advanced-tabs (pills)".
+   =========================================================================== */
+.advanced-tabs.pills .tab-list {
+  gap: 8px;
+  padding: 4px;
+  width: fit-content;
+  margin-inline: auto;
+  background-color: var(--color-shaded, #f2f2f2);
+  border-radius: 999px;
+
+  button {
+    border-bottom: 0;
+    border-radius: 999px;
+    padding: 8px 20px;
+    font-size: var(--body-font-size-m);
+    color: var(--color-text, currentcolor);
+    transition: background-color 0.2s ease, color 0.2s ease;
+
+    &.is-active {
+      border-bottom: 0;
+      background-color: var(--color-cta, var(--color-primary));
+      color: var(--color-cta-text, #fff);
+    }
+  }
+}
