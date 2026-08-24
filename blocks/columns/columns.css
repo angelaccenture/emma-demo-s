@@ -103,6 +103,13 @@
       transform: translateY(12rem);
       will-change: transform;
     }
+
+    /* right column — media (.person-timeline-media) */
+    .col-2 {
+      flex: 3;
+      min-width: 0;
+      position: relative;
+    }
   }
 }
 
