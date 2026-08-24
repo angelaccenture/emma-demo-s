@@ -104,13 +104,16 @@
     }
   }
 
-  /* Overlay: image fills the card, title overlays the bottom, whole card clickable */
+  /* Overlay: image fills the card, title overlays the bottom, whole card clickable.
+     Values mirror SAP's .person-line-card / .person-line-card-title. */
   &.overlay {
     position: relative;
     border: none;
-    border-radius: 16px;
+    border-radius: 8px;
     background-color: initial;
     color: var(--color-light);
+    aspect-ratio: 218 / 300;
+    transition: filter 0.28s ease, opacity 0.28s ease, box-shadow 0.3s ease;
 
     .card-inner {
       display: block;
@@ -119,28 +122,18 @@
     }
 
     .card-picture-container {
-      position: relative;
-      padding-bottom: 128%;
+      position: absolute;
+      inset: 0;
 
       picture {
         position: absolute;
         inset: 0;
-        opacity: 1;
       }
 
       img {
         object-fit: cover;
         width: 100%;
         height: 100%;
-        transition: transform 0.4s ease;
-      }
-
-      /* gradient scrim so white text stays readable over the photo */
-      &::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(to top, rgb(0 0 0 / 80%) 0%, rgb(0 0 0 / 30%) 35%, rgb(0 0 0 / 0%) 65%);
       }
     }
 
@@ -148,12 +141,16 @@
       position: absolute;
       inset: auto 0 0;
       padding: var(--spacing-m) var(--spacing-l) var(--spacing-l);
+      text-align: center;
 
       h3 {
         margin: 0;
         color: var(--color-light);
-        font-size: var(--heading-font-size-m, 24px);
-        line-height: 1.15;
+        font-weight: 500;
+        font-size: 28px;
+        line-height: 1.1;
+        transform: translateY(0);
+        transition: transform 0.28s ease;
       }
     }
 
@@ -175,13 +172,16 @@
       }
     }
 
-    &:hover {
-      border: none;
-      box-shadow: 0 10px 24px rgb(0 0 0 / 35%);
-      transform: translateY(-4px);
+    /* On hover, an inset bottom scrim darkens the base of the card so the
+       raised title stays readable (SAP uses inset box-shadow for this). */
+    &:hover,
+    &:focus-within {
+      box-shadow:
+        inset 0 -36px 50px rgb(6 10 21 / 72%),
+        0 12px 30px rgb(6 12 27 / 52%);
 
-      img {
-        transform: scale(1.05);
+      .card-content-container h3 {
+        transform: translateY(-15px);
       }
     }
   }
