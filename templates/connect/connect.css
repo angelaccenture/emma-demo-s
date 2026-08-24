@@ -101,6 +101,16 @@ body.connect-template main > .section.grid-6 > .default-content > h2 {
   color: var(--color-light);
 }
 
+/* Line-of-business tiles: the source photos are wide landscape (2.33:1) but the
+   tiles are portrait, so a center crop misframes subjects who sit off-center.
+   Frame each tile on its subject (positional — matches the authored image order). */
+body.connect-template main > .section.grid-6 > .block-content > .card.overlay:nth-child(1) img { object-position: 52% 50%; }
+body.connect-template main > .section.grid-6 > .block-content > .card.overlay:nth-child(2) img { object-position: 46% 50%; }
+body.connect-template main > .section.grid-6 > .block-content > .card.overlay:nth-child(3) img { object-position: 43% 50%; }
+body.connect-template main > .section.grid-6 > .block-content > .card.overlay:nth-child(4) img { object-position: 38% 50%; }
+body.connect-template main > .section.grid-6 > .block-content > .card.overlay:nth-child(5) img { object-position: 60% 50%; }
+body.connect-template main > .section.grid-6 > .block-content > .card.overlay:nth-child(6) img { object-position: 50% 50%; }
+
 /* Line-of-business tile row: hovering (or focusing) the row dims every card
    except the one under the pointer, matching SAP's .person-line-grid behavior.
    The grid-6 section's block-content is the row container. */
